@@ -7,9 +7,7 @@ const Favourites = () => {
     const [msg, setMsg] = useState("");
     const [items, setItem] = useState([{ ...initialVal }])
     useEffect(() => {
-        console.log('sasasaa', localStorage.getItem("fav"))
-
-        if (localStorage.getItem("fav") === null) {
+        if (localStorage.getItem("fav") === null || JSON.parse(localStorage.getItem("fav") || "")?.length === 0) {
             setMsg("No Favourites")
         } else {
             setMsg("");
