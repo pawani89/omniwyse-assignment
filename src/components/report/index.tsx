@@ -9,6 +9,7 @@ import {
     CardHeader,
     CardBody,
 } from "@progress/kendo-react-layout";
+import { FoodgridWrapper, SearchWrapper } from "../../styles";
 const Report = () => {
     const [items, setItem] = useState([{ ...foodNutrients }])
     const [desc, setDesc] = useState("");
@@ -31,35 +32,43 @@ const Report = () => {
     }, [])
     return (
         <>
-            {err !== "" ? (<div>{err}</div>) : (
-                <div style={{
-                    marginLeft: "40%"
-                }}>
+            <SearchWrapper>
+                {/* <div style={{ marginLeft: "40%", marginTop: "10px" }}> */}
+                <Label>Basic Report</Label>
+                {/* </div> */}
+            </SearchWrapper>
+            <FoodgridWrapper>
+                {err !== "" ? (<div>{err}</div>) : (
+                    //  style={{
+                    //     marginLeft: "40%"
+                    // // }}
+                    <div>
 
-                    <Card
-                        style={{
-                            width: 260,
-                            boxShadow: "0 0 4px 0 rgba(0, 0, 0, .1)",
-                            marginTop: "10px",
-                        }}
-                    >
-                        <CardHeader><Label>{desc}({fcid})</Label></CardHeader>
-                        <CardBody>
-                            {
-                                items.map((i, ind) => {
-                                    return (
+                        <Card
+                            style={{
+                                width: 260,
+                                boxShadow: "0 0 4px 0 rgba(0, 0, 0, .1)",
+                                marginTop: "10px",
+                            }}
+                        >
+                            <CardHeader><Label>{desc}({fcid})</Label></CardHeader>
+                            <CardBody>
+                                {
+                                    items.map((i, ind) => {
+                                        return (
 
-                                        <div className="k-text-inverse k-text-uppercase k-font-weight-bold">
-                                            {i.nutrientName}:{i.value}{i.unitName}
-                                        </div>
+                                            <div className="k-text-inverse k-text-uppercase k-font-weight-bold">
+                                                {i.nutrientName}:{i.value}{i.unitName}
+                                            </div>
 
-                                    )
-                                })
-                            }
-                        </CardBody>
-                    </Card>
-                </div>
-            )}
+                                        )
+                                    })
+                                }
+                            </CardBody>
+                        </Card>
+                    </div>
+                )}
+            </FoodgridWrapper>
         </>
 
     )

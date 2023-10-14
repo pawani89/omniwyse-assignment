@@ -2,7 +2,7 @@ import { Label } from "@progress/kendo-react-labels";
 import React, { useEffect, useState } from "react";
 import FoodGrid from "../home/foodGrid";
 import { initialVal } from "../../constants";
-
+import { FoodgridWrapper, SearchWrapper } from "../../styles";
 const Favourites = () => {
     const [msg, setMsg] = useState("");
     const [items, setItem] = useState([{ ...initialVal }])
@@ -17,7 +17,16 @@ const Favourites = () => {
 
     }, [])
     return (
-        <>{msg === "" ? (<FoodGrid result={items} loader={false} showFav={false} />) : <div> <Label>{msg}</Label></div>}</>
+        <>
+            <SearchWrapper>
+                <Label>Your Favourites</Label>
+            </SearchWrapper>
+            <FoodgridWrapper>
+                {msg === "" ?
+                    (<FoodGrid result={items} loader={false} showFav={false} />)
+                    : <div> <Label>{msg}</Label></div>}
+            </FoodgridWrapper>
+        </>
     )
 }
 export default Favourites;

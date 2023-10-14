@@ -20,8 +20,10 @@ const FoodGrid = (props: FoodGridInterface) => {
     const breakpoint = 620;
     const rowRef = useRef(1);
     const colRef = useRef(1);
+    const colSizeRef = useRef([{ width: 0 }]);
     rowRef.current = 0;
     colRef.current = 0;
+    colSizeRef.current = [{ width: 0 }]
     const navigate = useNavigate();
     const { loader, result, showFav } = props;
     const [fav, setFav] = useState([{ ...initialVal }])
@@ -73,15 +75,23 @@ const FoodGrid = (props: FoodGridInterface) => {
         }
     }
 
-    const setCol = () => {
-        let x = width < breakpoint ? 1 : 3
-        if (colRef.current < x) {
-            colRef.current = colRef.current + 1;
-        } else {
+    const setCol = (ind: number) => {
+        if (width < breakpoint) {
             colRef.current = 0;
-            rowRef.current = rowRef.current + 1
+            rowRef.current = ind;
+            colSizeRef.current = [{ width: 300 }]
+        } else {
+            colSizeRef.current = [{ width: 300 }, { width: 300 }, { width: 300 }, { width: 300 }];
+            if ((ind & 3) === 0) {
+                colRef.current = 1;
+                rowRef.current = rowRef.current + 1
+
+            } else {
+                colRef.current = colRef.current + 1;
+
+            }
+
         }
-        console.log("a row: ", rowRef.current, "col", colRef.current)
         return <></>;
     }
 
@@ -89,7 +99,8 @@ const FoodGrid = (props: FoodGridInterface) => {
 
         <GridLayout
             gap={{ cols: 2 }}
-            cols={[{ width: 300 }, { width: 300 }, { width: 300 }, { width: 300 }]}
+            cols={colSizeRef.current}
+            style={{ margin: "0 auto" }}
         >
             {loader ? <div>Loading.....</div> : (<>
                 {fav?.[0]?.fdcId !== 0 ? (<>
@@ -97,10 +108,10 @@ const FoodGrid = (props: FoodGridInterface) => {
                         return (
 
                             <GridLayoutItem row={rowRef.current} col={colRef.current} >
-                                {setCol()}
+                                {setCol(ind)}
                                 <Card
                                     style={{
-                                        width: 250,
+                                        width: 300,
                                         height: 200,
                                         boxShadow: "0 0 4px 0 rgba(0, 0, 0, .1)",
                                         marginTop: "10px",
@@ -119,7 +130,7 @@ const FoodGrid = (props: FoodGridInterface) => {
 
                                     </CardBody>
                                     <CardActions
-                                    // style={{ display: "flex", justifyContent: "space-between" }}
+                                        style={{ display: "flex", justifyContent: "space-between" }}
                                     >
                                         <Button onClick={() => handleItemClick(item.foodNutrients, item.fdcId, item.description)}>View More</Button>
                                         <Button hidden={!showFav} onClick={() => addToFav(item)}>Add Favourite</Button>

@@ -6,7 +6,7 @@ import { initialVal } from '../../constants';
 import FoodGrid from './foodGrid';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "@progress/kendo-react-indicators";
-
+import { SearchWrapper, FoodgridWrapper } from '../../styles';
 const Home = () => {
     const [search, setSearch] = useState("")
     const [result, setResult] = useState([{
@@ -18,7 +18,7 @@ const Home = () => {
     useEffect(() => { getResult() }, []);
 
     const getResult = async () => {
-        let res: any = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${search}&dataType=&api_key=RPadQrcmvjrGatvVndjccDRXPMn857UoKtXW1qJ3&pageNumber=${ref.current}&pageSize=200`);
+        let res: any = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${search}&dataType=&api_key=RPadQrcmvjrGatvVndjccDRXPMn857UoKtXW1qJ3&pageNumber=${ref.current}`);
         res = await res.json();
         let foodItems: FoodItem[] = res?.foods;
         setResult([...foodItems])
@@ -38,22 +38,25 @@ const Home = () => {
 
     return (
         <>
-            <div style={{ marginLeft: "40%", marginTop: "10px" }}>
+            {/* style={{ margin: "5% 10%" }} */}
+            <SearchWrapper >
                 <Input style={{ width: "200px" }} onChange={(e: InputChangeEvent) => setSearch(e.value)} placeholder='enter item to search' value={search}></Input>
                 <Button onClick={handleSearch}>Search</Button>
-            </div>
-            <div style={{ marginLeft: "2%" }}>
+            </SearchWrapper>
+            {/* style={{ margin: "5% 10%" }} */}
+            <FoodgridWrapper style={{ margin: "5% 10%" }}>
                 <InfiniteScroll
                     dataLength={ref.current * 10}
                     next={() => fetchMoreData()}
                     hasMore={true}
-                    loader={<div style={{ marginLeft: "40%" }}><Loader size="large" type="pulsing" /></div>}
+                    loader={<div style={{ margin: "2% 40%" }}><Loader size="large" type="pulsing" /></div>}
                     endMessage={"reached end"}
+
                 >
                     <FoodGrid result={result} loader={loader} showFav={true} />
                 </InfiniteScroll >
-            </div>
-        </ >
+            </FoodgridWrapper>
+        </>
     );
 }
 
