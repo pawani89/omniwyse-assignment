@@ -4,7 +4,11 @@ import { GridLayout, GridLayoutItem } from "@progress/kendo-react-layout";
 import { foodNutrients } from "../../constants";
 import { Label } from "@progress/kendo-react-labels";
 import { useParams } from "react-router-dom";
-
+import {
+    Card,
+    CardHeader,
+    CardBody,
+} from "@progress/kendo-react-layout";
 const Report = () => {
     const [items, setItem] = useState([{ ...foodNutrients }])
     const [desc, setDesc] = useState("");
@@ -28,23 +32,32 @@ const Report = () => {
     return (
         <>
             {err !== "" ? (<div>{err}</div>) : (
-                <div className="grid-layout-container">
-                    <Label>{desc}({fcid})</Label>
-                    <GridLayout
-                        gap={{ rows: 6, cols: 10 }}
+                <div style={{
+                    marginLeft: "40%"
+                }}>
+
+                    <Card
+                        style={{
+                            width: 260,
+                            boxShadow: "0 0 4px 0 rgba(0, 0, 0, .1)",
+                            marginTop: "10px",
+                        }}
                     >
-                        {
-                            items.map((i, ind) => {
-                                return (
-                                    <GridLayoutItem row={ind} col={5} colSpan={3}>
+                        <CardHeader><Label>{desc}({fcid})</Label></CardHeader>
+                        <CardBody>
+                            {
+                                items.map((i, ind) => {
+                                    return (
+
                                         <div className="k-text-inverse k-text-uppercase k-font-weight-bold">
                                             {i.nutrientName}:{i.value}{i.unitName}
                                         </div>
-                                    </GridLayoutItem>
-                                )
-                            })
-                        }
-                    </GridLayout>
+
+                                    )
+                                })
+                            }
+                        </CardBody>
+                    </Card>
                 </div>
             )}
         </>
