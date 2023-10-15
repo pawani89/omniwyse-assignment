@@ -28,7 +28,8 @@ export const initialVal = {
     ndbNumber: 0,
     additionalDescriptions: "",
     allHighlightFields: "",
-    score: 0
+    score: 0,
+    fav: false
   }
 
   export const foodNutrients= {

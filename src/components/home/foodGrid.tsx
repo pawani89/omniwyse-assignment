@@ -5,11 +5,17 @@ import { FoodItem, Nutrients } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { initialVal } from "../../constants";
 import {
+    commentIcon,
+    heartIcon,
+    heartOutlineIcon,
+} from "@progress/kendo-svg-icons";
+import {
     Card,
     CardBody,
     CardActions,
     Avatar,
 } from "@progress/kendo-react-layout";
+import { SvgIcon } from "@progress/kendo-react-common";
 interface FoodGridInterface {
     loader: boolean,
     result: FoodItem[],
@@ -49,14 +55,27 @@ const FoodGrid = (props: FoodGridInterface) => {
         navigate(`/${id}`);
     }
 
-    const addToFav = (item: FoodItem) => {
+    const addToFav = (item: FoodItem, id: number) => {
         let newFavList = [];
+        let x = fav.map((d) => {
+            if (d.fdcId === id) {
+                return {
+                    ...d,
+                    fav: true
+                }
+            }
+            return {
+                ...d
+            }
+        })
+        console.log('aaka: ', x)
+        setFav([...x]);
         if (localStorage.getItem("fav") !== null) {
             let addedItems = JSON.parse(localStorage.getItem("fav") || "");
 
-            newFavList = [...addedItems, { ...item }];
+            newFavList = [...addedItems, { ...item, fav: true }];
         } else {
-            newFavList = [item]
+            newFavList = [{ ...item, fav: true }]
 
         }
         localStorage.setItem("fav", JSON.stringify(newFavList));
@@ -64,14 +83,39 @@ const FoodGrid = (props: FoodGridInterface) => {
     }
 
     const removeFromFav = (id: number) => {
-
+        let x = fav.map((d) => {
+            if (d.fdcId === id) {
+                return {
+                    ...d,
+                    fav: false
+                }
+            }
+            return {
+                ...d
+            }
+        })
+        setFav([...x]);
         if (localStorage.getItem("fav") !== null) {
             let newFavList = []
             let addedItems = JSON.parse(localStorage.getItem("fav") || "");
 
             newFavList = addedItems.filter((d: FoodItem) => d.fdcId !== id);
+            newFavList = newFavList.map((d: FoodItem) => {
+                if (d.fdcId === id) {
+                    return {
+                        ...d,
+                        fav: false
+                    }
+                }
+                return {
+                    ...d
+                }
+            })
+            // console.log('akansha :', newFavList)
             localStorage.setItem("fav", JSON.stringify(newFavList));
-            setFav([...newFavList]);
+            if (!showFav) {
+                setFav([...newFavList]);
+            }
 
         }
     }
@@ -84,13 +128,16 @@ const FoodGrid = (props: FoodGridInterface) => {
         } else {
             colSizeRef.current = [{ width: 300 }, { width: 300 }, { width: 300 }, { width: 300 }];
             if ((ind & 3) === 0) {
-                colRef.current = 1;
                 rowRef.current = rowRef.current + 1
+                colRef.current = 1;
+
 
             } else {
                 colRef.current = colRef.current + 1;
 
+
             }
+
 
         }
         return <></>;
@@ -107,11 +154,13 @@ const FoodGrid = (props: FoodGridInterface) => {
             {loader ? <div>Loading.....</div> : (<>
                 {fav?.[0]?.fdcId !== 0 ? (<>
                     {fav.map((item, ind) => {
+                        setCol(ind)
                         return (
-
+                            // row={rowRef.current} col={colRef.current}
                             <GridLayoutItem row={rowRef.current} col={colRef.current} >
-                                {setCol(ind)}
+
                                 <Card
+                                    className
                                     style={{
                                         width: 300,
                                         height: 200,
@@ -142,9 +191,14 @@ const FoodGrid = (props: FoodGridInterface) => {
                                     <CardActions
                                         style={{ display: "flex", justifyContent: "space-between" }}
                                     >
-                                        <Button onClick={() => handleItemClick(item.foodNutrients, item.fdcId, item.description)}>View More</Button>
-                                        <Button hidden={!showFav} onClick={() => addToFav(item)}>Add Favourite</Button>
-                                        <Button hidden={showFav} onClick={() => removeFromFav(item.fdcId)}>Remove Favourites</Button>
+                                        <span onClick={() => handleItemClick(item.foodNutrients, item.fdcId, item.description)} className="k-button k-button-md k-rounded-md k-button-flat k-button-flat-primary">View More</span>
+                                        {/* <Button ></Button> */}
+                                        {item.fav ? (
+                                            <Button onClick={() => removeFromFav(item.fdcId)}> <SvgIcon icon={heartIcon} /></Button>
+                                        ) : (
+                                            <Button onClick={() => addToFav(item, item.fdcId)}><SvgIcon icon={heartOutlineIcon} /></Button>
+                                        )}
+                                        {/* <Button hidden={showFav} onClick={() => removeFromFav(item.fdcId)}>Remove Favourites</Button> */}
                                     </CardActions>
                                 </Card>
                             </GridLayoutItem>

@@ -23,7 +23,8 @@ const Home = () => {
     const getResult = async () => {
         let res: any = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${search}&dataType=&api_key=RPadQrcmvjrGatvVndjccDRXPMn857UoKtXW1qJ3&pageNumber=${ref.current}`);
         res = await res.json();
-        let foodItems: FoodItem[] = res?.foods;
+        let foodItems: FoodItem[] = res?.foods.map((d: FoodItem) => { return { ...d, fav: false } });
+
         if (result?.[0]?.fdcId !== 0) {
             setResult([...result, ...foodItems])
         } else {

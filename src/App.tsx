@@ -11,6 +11,7 @@ import {
   MenuSelectEvent,
 } from "@progress/kendo-react-layout";
 import { useEffect, useState } from 'react';
+import { Label } from '@progress/kendo-react-labels';
 
 function App() {
 
@@ -28,12 +29,14 @@ function App() {
   return (
     <>
       {width < breakpoint ? (
-        <Menu onSelect={(e) => onSelect(e)}>
+        <><Menu onSelect={(e) => onSelect(e)}>
           <MenuItem text="Menu">
             <MenuItem text="Home" data={{ route: '/home' }} />
             <MenuItem text="Favourites" data={{ route: '/favourites' }} />
           </MenuItem>
-        </Menu>) : (<AppBar>
+        </Menu>
+          <Label>Food Site!!</Label>
+        </>) : (<><AppBar>
           <AppBarSection>
             <NavLink to="/home">Home</NavLink>
           </AppBarSection>
@@ -41,14 +44,15 @@ function App() {
             <NavLink to="/favourites">Favourites</NavLink>
           </AppBarSection>
         </AppBar>
-
+          <Label>Food Site!!</Label>
+        </>
 
       )}
 
 
       <Routes>
         <Route path='/'></Route>
-        <Route path='/home' element={<Home></Home>}></Route>
+        <Route index path='/home' element={<Home></Home>}></Route>
         <Route path='/favourites' element={<Favourites></Favourites>}></Route>
         <Route path='/:id' element={<Report></Report>}></Route>
       </Routes>

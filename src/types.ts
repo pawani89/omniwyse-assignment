@@ -29,7 +29,8 @@ export interface Nutrients {
     ndbNumber: number,
     additionalDescriptions: string,
     allHighlightFields: string,
-    score: number
+    score: number,
+    fav:boolean
   }
 
   export interface FoodGridInterface {
