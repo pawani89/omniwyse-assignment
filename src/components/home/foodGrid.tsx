@@ -8,6 +8,7 @@ import {
     Card,
     CardBody,
     CardActions,
+    Avatar,
 } from "@progress/kendo-react-layout";
 interface FoodGridInterface {
     loader: boolean,
@@ -100,7 +101,8 @@ const FoodGrid = (props: FoodGridInterface) => {
         <GridLayout
             gap={{ cols: 2 }}
             cols={colSizeRef.current}
-            style={{ margin: "0 auto" }}
+
+        // style={{ margin: "0 auto" }}
         >
             {loader ? <div>Loading.....</div> : (<>
                 {fav?.[0]?.fdcId !== 0 ? (<>
@@ -116,7 +118,15 @@ const FoodGrid = (props: FoodGridInterface) => {
                                         boxShadow: "0 0 4px 0 rgba(0, 0, 0, .1)",
                                         marginTop: "10px",
                                     }}
+                                    orientation="vertical"
                                 >
+                                    <Avatar type="image" size="medium">
+                                        <img
+                                            style={{ width: 45, height: 45 }}
+                                            alt="KendoReact Card Thumbnail"
+                                            src={"https://www.telerik.com/kendo-angular-ui-develop/components/layout/card/assets/rila_lakes.jpg"}
+                                        />
+                                    </Avatar>
                                     <CardBody>
                                         <div className="k-text-inverse k-text-uppercase k-font-weight-bold">
                                             FDCID: {item.fdcId}
